@@ -22,9 +22,9 @@ class MayaSessionCollector(HookBaseClass):
         publisher = self.parent
         if item.properties.is_sequence:
             first_frame = int(publisher.util.get_frame_number(item.properties.sequence_paths[0]))
-            last_frame = int(publisher.util.get_frame_number(item.properties.sequence_paths[-1]))
+            end_frame = int(publisher.util.get_frame_number(item.properties.sequence_paths[-1]))
             # TODO: Update to Dynamic process, When there is a need for different attribute values from the camera.
-            focal_length_dict = self.get_focal_length(first_frame, last_frame)
+            focal_length_dict = self.get_focal_length(first_frame, end_frame)
             if focal_length_dict:
                 fields.update({"FocalLength": focal_length_dict})
         return fields
