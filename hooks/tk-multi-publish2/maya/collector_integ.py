@@ -1,16 +1,14 @@
 import maya.cmds as cmds
 import sgtk
-from sgtk import TankError
-from sgtk.templatekey import SequenceKey
-
 
 HookBaseClass = sgtk.get_hook_baseclass()
 
 
-class MayaSessionCollector(HookBaseClass):
+class MayaFocalLengthCollector(HookBaseClass):
     """
     Inherits from maya collector.
-    Adds maya session based attributes to item.properties.fields
+    Adds new key FocalLength to item.properties.fields
+    and the value would be dictionary which contains framewise FocalLength value.
     """
     def _resolve_item_fields(self, settings, item):
         """
@@ -18,7 +16,7 @@ class MayaSessionCollector(HookBaseClass):
         Intended to be overridden by DCC-specific subclasses.
         """
         # Now run the parent resolve method
-        fields = super(MayaSessionCollector, self)._resolve_item_fields(settings, item)
+        fields = super(MayaFocalLengthCollector, self)._resolve_item_fields(settings, item)
         publisher = self.parent
         if item.properties.is_sequence:
             first_frame = int(publisher.util.get_frame_number(item.properties.sequence_paths[0]))
@@ -31,12 +29,11 @@ class MayaSessionCollector(HookBaseClass):
 
     def get_focal_length(self, start_frame, end_frame):
         """
-        Returns the Focal length from the scene
+        Returns the FocalLength value  per frame as a dictionary.
         """
         focal_length = {}
         for i in range(start_frame, end_frame + 1):
             act_camera = str(cmds.lookThru(q=1))
-            foc_len = round(cmds.getAttr(act_camera + ".focalLength", time=i), 3)
-            focal_length[i] = foc_len
+            focal_length[i] = round(cmds.getAttr(act_camera + ".focalLength", time=i), 3)
         return focal_length
 
