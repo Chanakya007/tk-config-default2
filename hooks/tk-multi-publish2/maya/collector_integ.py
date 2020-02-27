@@ -29,7 +29,6 @@ class MayaFocalLengthCollector(HookBaseClass):
                 focal_length_dict = self.get_focal_length(first_frame, end_frame)
                 if focal_length_dict:
                     fields.update({"FocalLength": focal_length_dict})
-        print fields
         return fields
 
     def get_focal_length(self, start_frame, end_frame):
