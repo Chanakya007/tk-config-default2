@@ -28,15 +28,11 @@ class MayaFocalLengthCollector(HookBaseClass):
                 # TODO: Update to Dynamic process, When there is a need for different attribute values from the camera.
                 focal_length_dict = self.get_focal_length(first_frame, end_frame)
                 if focal_length_dict:
-                    fields.update({"FocalLength": focal_length_dict})
+                    fields["focal_length"] = focal_length_dict
         return fields
 
     def get_focal_length(self, start_frame, end_frame):
         """
         Returns the FocalLength value  per frame as a dictionary.
         """
-        focal_length = {}
-        for i in range(start_frame, end_frame + 1):
-            focal_length[i] = round(cmds.getAttr(CAMERA_NAME + ".focalLength", time=i), 3)
-        return focal_length
-
+        return {i: round(cmds.getAttr(CAMERA_NAME + ".focalLength", time=i), 3) for i in range(start_frame,end_frame+1)}
